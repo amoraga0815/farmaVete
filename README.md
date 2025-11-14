@@ -1,2 +1,0 @@
-# farmaVete
-Farmacia Veterinaria
