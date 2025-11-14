@@ -14,7 +14,7 @@ export default function Header(){
         <div className="container-fluid px-3">
           {/* Logo */}
           <a className="navbar-brand d-flex align-items-center gap-2" href="/">
-            <span className="fw-bold fs-4" style={{color:'#0f2c6e'}}>LA VETE</span>
+            <span className="fw-bold fs-4" style={{color:'#0f2c6e'}}>LUNA & ERNESTO</span>
           </a>
 
           {/* Toggler móvil */}
@@ -26,12 +26,8 @@ export default function Header(){
           <div className="collapse navbar-collapse" id="mainNav">
 
 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-  <li className="nav-item"><Link className="nav-link" to="/tienda">Alimento</Link></li>
-  <li className="nav-item"><a className="nav-link" href="#">Juguetes</a></li>
-  <li className="nav-item"><a className="nav-link" href="#">Accesorios</a></li>
-  <li className="nav-item"><a className="nav-link" href="#">Snacks</a></li>
-  <li className="nav-item"><a className="nav-link" href="#">Farmacia</a></li>
-  <li className="nav-item"><a className="nav-link" href="#">Cuidado de Mascotas</a></li>
+  <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
+  
 </ul>
 
             {/* Acciones */}

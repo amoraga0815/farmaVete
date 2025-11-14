@@ -1,5 +1,9 @@
 
+import { useNavigate } from 'react-router-dom'
+
 export default function ProductCard({ product }){
+  const navigate = useNavigate()
+
   return (
     <div className="card-product">
       <img src={product.image} alt={product.name} loading="lazy" />
@@ -20,10 +24,14 @@ export default function ProductCard({ product }){
         {!product.fromPrice && (
           <div className="price fs-5">₡ {product.price.toLocaleString('es-CR')}</div>
         )}
-        <button className="btn btn-primary">
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate(`/producto/${product.id}`)}  // ⬅️ Ir al detalle
+        >
           Agregar al Carrito
         </button>
       </div>
     </div>
   )
 }
+
