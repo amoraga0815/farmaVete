@@ -1,0 +1,23 @@
+
+import { Routes, Route } from 'react-router-dom'
+import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx'
+import Home from './pages/Home.jsx'
+import Shop from './pages/Shop.jsx'
+
+export default function App() {
+  return (
+    <div className="app-grid">
+      <Header />
+
+      <main className="app-main" role="main" aria-label="Contenido principal">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/tienda" element={<Shop />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
