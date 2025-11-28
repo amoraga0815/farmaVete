@@ -36,8 +36,6 @@ export default function ProductDetail(){
 
   const price = product.price ?? product.fromPrice ?? 0
 
-  // Variantes de ejemplo (si tu producto no trae, mostramos dos “pesos” de demo)
-  const variants = product.variants ?? ['1.8KG', '5.4KG']
 
   const addToCart = () => {
     // Aquí iría tu lógica real de carrito
@@ -64,23 +62,11 @@ export default function ProductDetail(){
         <div className="product-gallery-card">
           <img src={product.image} alt={product.name} />
         </div>
-        {/* Paginación simple de demo */}
-        <div className="d-flex align-items-center justify-content-center gap-2 mt-2">
-          <button className="btn btn-outline-secondary btn-sm" disabled><i className="bi bi-chevron-left"></i></button>
-          <span className="small text-muted">1 / 1</span>
-          <button className="btn btn-outline-secondary btn-sm" disabled><i className="bi bi-chevron-right"></i></button>
-        </div>
+
       </div>
 
       {/* Información */}
       <div className="product-info">
-        <div className="d-flex align-items-center gap-2 mb-2">
-          <div className="rating" aria-label={`Calificación ${product.rating} de 5`}>
-            {'★'.repeat(Math.round(product.rating))}{'☆'.repeat(5-Math.round(product.rating))}
-          </div>
-          <span className="small text-muted">({Math.round(product.rating*8)})</span>
-        </div>
-
         <h2 className="mb-2">{product.name}</h2>
 
         <div className="fs-4 fw-bold mb-2" style={{color:'#0f2c6e'}}>₡ {price.toLocaleString('es-CR')}</div>
@@ -99,22 +85,6 @@ export default function ProductDetail(){
           <div className="col-6"><span className="text-muted">Tags:</span> <span className="badge bg-light text-dark">{product.brand}</span></div>
         </div>
 
-        {/* Variantes / tamaños */}
-        <div className="mb-3">
-          <div className="small text-muted mb-1">Cantidad</div>
-          <div className="btn-group" role="group" aria-label="Variantes">
-            {variants.map(v => (
-              <button
-                key={v}
-                className={`btn btn-outline-secondary ${variant === v ? 'active' : ''}`}
-                onClick={() => setVariant(v)}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Selector de cantidad */}
         <div className="mb-3">
           <div className="small text-muted mb-1">Cantidad</div>
@@ -128,12 +98,6 @@ export default function ProductDetail(){
         {/* Acciones */}
         <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
           <button className="btn btn-primary" onClick={addToCart}>Agregar al Carrito</button>
-          <button className="btn btn-outline-secondary">Comprar Ahora</button>
-        </div>
-
-        <div className="d-flex align-items-center gap-3 small">
-          <button className="btn btn-link p-0"><i className="bi bi-heart"></i> Agregar a Favoritos</button>
-          <button className="btn btn-link p-0"><i className="bi bi-diagram-2"></i> Agregar al Comparador</button>
         </div>
       </div>
 

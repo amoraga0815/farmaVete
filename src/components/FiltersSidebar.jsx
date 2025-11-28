@@ -40,26 +40,6 @@ export default function FiltersSidebar({ state, setState, offcanvasId='offFilter
         <h6 className="mb-3">Filtrar Por</h6>
 
         <div className="mb-3">
-          <small className="text-muted d-block mb-1">Disponibilidad</small>
-          {['En existencia', 'Agotadas'].map(opt => (
-            <div className="form-check" key={opt}>
-              <input className="form-check-input" type="checkbox" id={`disp-${opt}`} onChange={() => toggle('availability', opt)} />
-              <label className="form-check-label" htmlFor={`disp-${opt}`}>{opt}</label>
-            </div>
-          ))}
-        </div>
-
-        <div className="mb-3">
-          <small className="text-muted d-block mb-1">Precio</small>
-          <div className="d-flex align-items-center gap-2">
-            <span>₡</span>
-            <input id={priceFromId} className="form-control" placeholder="De" style={{maxWidth:'120px'}} onChange={(e)=>setState(p=>({...p, priceFrom:e.target.value}))}/>
-            <span>a</span>
-            <input id={priceToId} className="form-control" placeholder="A" style={{maxWidth:'120px'}} onChange={(e)=>setState(p=>({...p, priceTo:e.target.value}))}/>
-          </div>
-        </div>
-
-        <div className="mb-3">
           <small className="text-muted d-block mb-1">Marca</small>
           {['QPets','Ancare','Bravecto','Credelio','EasyGroom','Grizzly','Himalaya'].map(brand=>(
             <div className="form-check" key={brand}>

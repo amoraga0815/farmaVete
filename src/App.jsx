@@ -10,7 +10,7 @@ export default function App() {
   return (
     <div className="app-grid">
       <Header />
-
+      
       <main className="app-main" role="main" aria-label="Contenido principal">
         <Routes>
           <Route path="/" element={<Home />} />

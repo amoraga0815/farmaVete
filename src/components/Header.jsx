@@ -1,9 +1,13 @@
 
+import { useDataContext } from '../data/DataContext.jsx'
 import { Link } from 'react-router-dom'
 
 
 
 export default function Header(){
+
+  const ctx = useDataContext();
+
   return (
     <header>
       <div className="topbar text-center py-1">
@@ -13,9 +17,9 @@ export default function Header(){
       <nav className="navbar navbar-expand-lg site-nav">
         <div className="container-fluid px-3">
           {/* Logo */}
-          <a className="navbar-brand d-flex align-items-center gap-2" href="/">
+          <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
             <span className="fw-bold fs-4" style={{color:'#0f2c6e'}}>LUNA & ERNESTO</span>
-          </a>
+          </Link>
 
           {/* Toggler móvil */}
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -29,15 +33,11 @@ export default function Header(){
   <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
   
 </ul>
-
             {/* Acciones */}
             <div className="d-flex align-items-center gap-3">
-              <button className="btn btn-link text-dark"><i className="bi bi-search fs-5"></i></button>
-              <button className="btn btn-link text-dark"><i className="bi bi-person fs-5"></i></button>
-              <button className="btn btn-link text-dark position-relative">
-                <i className="bi bi-heart fs-5"></i>
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1</span>
-              </button>
+              <div className="navbar-text ms-3">
+              Usuario: <span>{ctx.user?.username || '-'}</span> Perfil: <span>{ctx.user?.password || '-'}</span>
+            </div>
               <button className="btn btn-link text-dark position-relative">
                 <i className="bi bi-cart fs-5"></i>
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">2</span>

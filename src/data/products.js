@@ -1,6 +1,6 @@
 
 const products = [
-  { id: 1, name: 'ACEITE DE SALMÓN GRIZZLY', brand:'Grizzly', rating: 4.5, fromPrice: 13290, image: '/products/choiceCan.png' },
+  { id: 1, name: 'ACEITE DE SALMÓN GRIZZLY', brand:'Grizzly', rating: 4.5, price: 13290, image: '/products/choiceCan.png' },
   { id: 2, name: 'ACONDICIONADOR QPETS DOG 400ML', brand:'QPets', rating: 4.0, price: 38890, image: '/products/choice.png' },
   { id: 3, name: 'ANCAZORE DOGCAT 60TA', brand:'Himalaya', rating: 3.5, price: 7520, image: '/products/choice.png' },
   { id: 4, name: 'ATREVIA DOG ONE (10KG-20KG) UND', brand:'Ancare', rating: 4.2, price: 7847, image: '/products/choiceCan.png' },

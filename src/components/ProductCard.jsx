@@ -28,7 +28,7 @@ export default function ProductCard({ product }){
           className="btn btn-primary"
           onClick={() => navigate(`/producto/${product.id}`)}  // ⬅️ Ir al detalle
         >
-          Agregar al Carrito
+          Detalle Producto
         </button>
       </div>
     </div>
