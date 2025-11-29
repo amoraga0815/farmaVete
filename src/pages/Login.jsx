@@ -13,7 +13,7 @@ export default function Login() {
 	} = useForm();
 
 	const onSubmit = (data) => {
-		// Guarda usuario y contraseña en el contexto
+
     setUser({ username: data.username, password: data.password });
 	};
 

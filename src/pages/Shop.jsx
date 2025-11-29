@@ -1,13 +1,13 @@
 
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Offcanvas } from 'bootstrap'   // ⬅️ Importa el componente
-import productsData from '../data/products.js'
+import { Offcanvas } from 'bootstrap'   
 import Toolbar from '../components/Toolbar.jsx'
 import FiltersSidebar from '../components/FiltersSidebar.jsx'
 import ProductGrid from '../components/ProductGrid.jsx'
 
 export default function Shop(){
+  const [productsData, setProductsData] = useState([]) 
   const [sort, setSort] = useState('az')
   const [filters, setFilters] = useState({
     availability: [],
@@ -19,13 +19,23 @@ export default function Shop(){
   const offId = 'offFilters'
   const offInstance = useRef(null)
 
+  
+  
+  useEffect(() => {
+    fetch('http://localhost:4000/products') 
+      .then(response => response.json())
+      .then(data => setProductsData(data)) 
+      .catch(error => console.error('Error al cargar productos:', error))
+  }, [])
+
+
   useEffect(()=> {
     const el = document.getElementById(offId)
     if (el && !offInstance.current) {
-      // ⬅️ Usa la clase importada
+      
       offInstance.current = new Offcanvas(el)
     }
-    // Limpieza al desmontar
+    
     return () => {
       try { offInstance.current?.hide() } catch {}
       offInstance.current = null
@@ -33,7 +43,7 @@ export default function Shop(){
   }, [])
 
   const filtered = useMemo(()=>{
-    let list = [...productsData]
+    let list = [...productsData] 
     if (filters.brands.length){
       list = list.filter(p => filters.brands.includes(p.brand))
     }
@@ -49,7 +59,7 @@ export default function Shop(){
       list.sort((a,b)=> (a.price ?? a.fromPrice ?? 0) - (b.price ?? b.fromPrice ?? 0))
     }
     return list
-  }, [sort, filters])
+  }, [sort, filters, productsData])
 
   return (
     <section className="shop-grid container-fluid">
@@ -58,7 +68,7 @@ export default function Shop(){
           total={filtered.length}
           sort={sort}
           setSort={setSort}
-          onOpenFilters={() => offInstance.current?.show()}  // ⬅️ Llama a show() del Offcanvas
+          onOpenFilters={() => offInstance.current?.show()}  
         />
       </div>
 

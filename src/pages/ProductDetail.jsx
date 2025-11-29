@@ -2,14 +2,14 @@
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import products from '../data/products.js'
-import { Toast } from 'bootstrap' // ⬅️ Opción A (mismo patrón que Offcanvas)
+import { Toast } from 'bootstrap' 
 
 export default function ProductDetail(){
   const { id } = useParams()
   const navigate = useNavigate()
   const product = useMemo(() => products.find(p => String(p.id) === String(id)), [id])
 
-  // Si el producto no existe
+
   if (!product){
     return (
       <div className="container py-4">
@@ -21,15 +21,14 @@ export default function ProductDetail(){
     )
   }
 
-  // Estado UI
+
   const [qty, setQty] = useState(1)
   const [variant, setVariant] = useState('default')
 
-  // Toast “agregado al carrito”
+
   const toastRef = useRef(null)
   useEffect(() => {
     if (toastRef.current) {
-      // instanciamos cuando el nodo exista
       toastRef.current = new Toast(toastRef.current)
     }
   }, [])
@@ -38,8 +37,6 @@ export default function ProductDetail(){
 
 
   const addToCart = () => {
-    // Aquí iría tu lógica real de carrito
-    // Mostramos un toast de confirmación
     try {
       const el = document.getElementById('addedToast')
       if (el) new Toast(el).show()

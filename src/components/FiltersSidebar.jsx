@@ -33,7 +33,6 @@ export default function FiltersSidebar({ state, setState, offcanvasId='offFilter
     </>
   )
 
-  /* ---- Componente interno con los controles ---- */
   function FilterContent(){
     return (
       <div>

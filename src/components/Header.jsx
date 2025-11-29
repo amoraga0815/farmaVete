@@ -11,7 +11,7 @@ export default function Header(){
   return (
     <header>
       <div className="topbar text-center py-1">
-        Envíos dentro del GAM entre 48 y 72 horas (Costa Rica). Política de devolución de 30 días. Envío estándar gratuito en pedidos superiores a ₡65,000
+    Envío estándar gratuito en pedidos superiores a ₡65,000
       </div>
 
       <nav className="navbar navbar-expand-lg site-nav">
@@ -40,7 +40,7 @@ export default function Header(){
             </div>
               <button className="btn btn-link text-dark position-relative">
                 <i className="bi bi-cart fs-5"></i>
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">2</span>
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"></span>
               </button>
             </div>
           </div>

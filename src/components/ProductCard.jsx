@@ -26,7 +26,7 @@ export default function ProductCard({ product }){
         )}
         <button
           className="btn btn-primary"
-          onClick={() => navigate(`/producto/${product.id}`)}  // ⬅️ Ir al detalle
+          onClick={() => navigate(`/producto/${product.id}`)}  
         >
           Detalle Producto
         </button>
