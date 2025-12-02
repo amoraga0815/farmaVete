@@ -14,18 +14,25 @@ import App from './App.jsx'
 import Login from './pages/Login.jsx';
 import { DataProvider, useDataContext } from './data/DataContext';
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 
 function Root() {
   const { user } = useDataContext();
   return user ? <App /> : <Login />;
+  //return user ? <App /> : <Registro />;
 }
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
     <DataProvider>
       <BrowserRouter>
         <Root />
       </BrowserRouter>
     </DataProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 )

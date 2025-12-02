@@ -70,7 +70,7 @@ export default function ProductDetail(){
 
         <p className="text-muted">
           Alimento de la marca {product.brand}. Fórmula para mascotas adultas. <br/>
-          (Descripción de ejemplo; reemplaza con la de tu catálogo real).
+        
         </p>
 
         <hr/>

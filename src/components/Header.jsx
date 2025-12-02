@@ -11,7 +11,7 @@ export default function Header(){
   return (
     <header>
       <div className="topbar text-center py-1">
-    Envío estándar gratuito en pedidos superiores a ₡65,000
+    Envío estándar gratuito en pedidos superiores a ₡20,000
       </div>
 
       <nav className="navbar navbar-expand-lg site-nav">
@@ -31,12 +31,13 @@ export default function Header(){
 
 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
   <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
-  
+  <li className="nav-item"><Link className="nav-link" to="/react-query">React Query</Link></li>
+  <li className="nav-item"><Link className="nav-link" to="/mantproductos">Mant Producto</Link></li>
 </ul>
             {/* Acciones */}
             <div className="d-flex align-items-center gap-3">
               <div className="navbar-text ms-3">
-              Usuario: <span>{ctx.user?.username || '-'}</span> Perfil: <span>{ctx.user?.password || '-'}</span>
+              Usuario: <span>{ctx.user?.username || '-'}</span> Perfil: <span>{/* {ctx.user?.password || '-'} */} Admin</span>
             </div>
               <button className="btn btn-link text-dark position-relative">
                 <i className="bi bi-cart fs-5"></i>
