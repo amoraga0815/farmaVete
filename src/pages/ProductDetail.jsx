@@ -1,46 +1,69 @@
 
-import { useMemo, useRef, useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import products from '../data/products.js'
-import { Toast } from 'bootstrap' 
+import { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Toast } from 'bootstrap';
 
-export default function ProductDetail(){
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const product = useMemo(() => products.find(p => String(p.id) === String(id)), [id])
+export default function ProductDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [qty, setQty] = useState(1);
+  const toastRef = useRef(null);
 
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    fetch(`http://localhost:4000/products/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Producto no encontrado');
+        return res.json();
+      })
+      .then(data => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [id]);
 
-  if (!product){
-    return (
-      <div className="container py-4">
-        <div className="alert alert-warning d-flex align-items-center justify-content-between">
-          <div>Producto no encontrado.</div>
-          <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>Volver</button>
-        </div>
-      </div>
-    )
-  }
-
-
-  const [qty, setQty] = useState(1)
-  const [variant, setVariant] = useState('default')
-
-
-  const toastRef = useRef(null)
   useEffect(() => {
     if (toastRef.current) {
-      toastRef.current = new Toast(toastRef.current)
+      toastRef.current = new Toast(toastRef.current);
     }
-  }, [])
+  }, []);
 
-  const price = product.price ?? product.fromPrice ?? 0
-
+  const price = product?.price ?? product?.fromPrice ?? 0;
 
   const addToCart = () => {
     try {
-      const el = document.getElementById('addedToast')
-      if (el) new Toast(el).show()
+      const el = document.getElementById('addedToast');
+      if (el) new Toast(el).show();
     } catch {}
+  };
+
+  if (loading) {
+    return (
+      <div className="container py-4 text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="container py-4">
+        <div className="alert alert-warning d-flex align-items-center justify-content-between">
+          <div>{error || 'Producto no encontrado.'}</div>
+          <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>Volver</button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -59,7 +82,6 @@ export default function ProductDetail(){
         <div className="product-gallery-card">
           <img src={product.image} alt={product.name} />
         </div>
-
       </div>
 
       {/* Información */}
@@ -70,7 +92,6 @@ export default function ProductDetail(){
 
         <p className="text-muted">
           Alimento de la marca {product.brand}. Fórmula para mascotas adultas. <br/>
-        
         </p>
 
         <hr/>
@@ -110,5 +131,5 @@ export default function ProductDetail(){
         </div>
       </div>
     </section>
-  )
+  );
 }
