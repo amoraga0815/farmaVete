@@ -1,9 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 // Asegúrate de tener Bootstrap importado en tu proyecto, por ejemplo en index.html o main.jsx
 export default function Registro() {
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
- 
+  const navigate = useNavigate();
+
   const password = watch("password", "");
   const onSubmit = async (dataNew) => {
     // Crear el objeto usuario
@@ -30,6 +32,10 @@ export default function Registro() {
       alert(error.message);
     }
   }
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate('/login');
+  };
   return (
     <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-white">
       <div className="card shadow-lg p-4" style={{ maxWidth: '700px', width: '100%' }}>    
@@ -102,11 +108,15 @@ export default function Registro() {
             />
             {errors.confirmPassword && <div className="text-danger small mt-1">{errors.confirmPassword.message}</div>}
           </div>
-          <button type="submit" className="btn btn-primary w-100 fw-bold">
-            Registrarse
-          </button>
+          <div className="d-flex gap-2">
+            <button type="submit" className="btn btn-primary w-100 fw-bold">
+              Registrarse
+            </button>
+            <button className="btn btn-secondary w-100 fw-bold" onClick={handleCancel}>
+              Cancelar
+            </button>
+          </div>
         </form>
-       
       </div>
     </div>
   );

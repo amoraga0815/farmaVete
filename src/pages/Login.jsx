@@ -1,5 +1,7 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataContext } from "../data/DataContext";
 
@@ -12,9 +14,11 @@ export default function Login() {
 		formState: { errors },
 	} = useForm();
 
+  const navigate = useNavigate();
 	const onSubmit = (data) => {
 
     setUser({ username: data.username, password: data.password });
+    navigate('/');
 	};
 
 	return (
@@ -53,6 +57,10 @@ export default function Login() {
             Ingresar
           </button>
         </form>
+        <div className="text-center mt-3">
+          ¿No tienes una cuenta?{' '}
+          <Link to="/registro">Regístrese aquí</Link>
+        </div>
       </div>
     </div>
 	);
