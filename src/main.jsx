@@ -19,16 +19,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 function RootRouter() {
-  const { user } = useDataContext();
-  if (user) {
-    return <App />;
-  }
-  // Si no hay usuario, solo permitir login y registro
   return (
     <Routes>
-      <Route path="/registro" element={<Registro />} />
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="*" element={<App />} />
     </Routes>
   );
 }

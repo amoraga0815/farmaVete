@@ -7,14 +7,15 @@ export default function Registro() {
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-  const password = watch("password", "");
+  const Password = watch("Password", "");
   const onSubmit = async (dataNew) => {
     // Crear el objeto usuario
     const user = {
-      nombre: dataNew.nombre,
-      apellido: dataNew.apellido,
-      email: dataNew.email,
-      password: dataNew.password
+      userName: dataNew.userName,
+      userLastName: dataNew.userLastName,
+      userEmail: dataNew.userEmail,
+      Password: dataNew.Password,
+      userPerfil: "cliente"
     };
     try {
       const response = await fetch("http://localhost:4000/users", {
@@ -51,29 +52,29 @@ export default function Registro() {
             <input
               className="form-control"
               placeholder="Nombre"
-              {...register("nombre", {
+              {...register("userName", {
                 required: 'El nombre es requerido',
               })}
             />
-            {errors.nombre && <div className="text-danger small mt-1">{errors.nombre.message}</div>}
+            {errors.userName && <div className="text-danger small mt-1">{errors.userName.message}</div>}
           </div>
           <div className="mb-3">
             <label className="form-label">Apellido</label>
             <input
               className="form-control"
               placeholder="Apellido"
-              {...register("apellido", {
+              {...register("userLastName", {
                 required: 'El apellido es requerido',
               })}
             />
-            {errors.apellido && <div className="text-danger small mt-1">{errors.apellido.message}</div>}
+            {errors.userLastName && <div className="text-danger small mt-1">{errors.userLastName.message}</div>}
           </div>
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
               className="form-control"
               placeholder="Email"
-              {...register("email", {
+              {...register("userEmail", {
                 required: 'El email es requerido',
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -81,7 +82,7 @@ export default function Registro() {
                 },
               })}
             />
-            {errors.email && <div className="text-danger small mt-1">{errors.email.message}</div>}
+            {errors.userEmail && <div className="text-danger small mt-1">{errors.userEmail.message}</div>}
           </div>
           <div className="mb-3">
             <label className="form-label">Contraseña</label>
@@ -89,7 +90,7 @@ export default function Registro() {
               className="form-control"
               placeholder="Contraseña"
               type="password"
-              {...register("password", {
+              {...register("Password", {
                 required: 'La contraseña es requerida',
                 minLength: {
                   value: 6,
@@ -97,7 +98,7 @@ export default function Registro() {
                 },  
               })}
             />
-            {errors.password && <div className="text-danger small mt-1">{errors.password.message}</div>}
+            {errors.Password && <div className="text-danger small mt-1">{errors.Password.message}</div>}
           </div>
           <div className="mb-3">
             <label className="form-label">Confirmar Contraseña</label>
@@ -108,7 +109,7 @@ export default function Registro() {
               {...register("confirmPassword", {
                 required: 'La confirmación de la contraseña es requerida',
                 validate: value =>
-                  value === password || 'Las contraseñas no coinciden',
+                  value === Password || 'Las contraseñas no coinciden',
               })}
             />
             {errors.confirmPassword && <div className="text-danger small mt-1">{errors.confirmPassword.message}</div>}

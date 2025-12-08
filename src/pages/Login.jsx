@@ -1,31 +1,54 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataContext } from "../data/DataContext";
 
-
 export default function Login() {
-	const { setUser } = useDataContext();
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+  const { setUser } = useDataContext();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const navigate = useNavigate();
-	const onSubmit = (data) => {
+  const [loginError, setLoginError] = useState("");
 
-    setUser({ username: data.username, password: data.password });
-    navigate('/');
-	};
+  
 
-	return (
-		<div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-white">
+const onSubmit = async ({ username, password }) => {
+  setLoginError("");
+  try {
+    const params = new URLSearchParams({
+      userName: username.trim(),   // <-- ojo: userName (camelCase)
+      Password: password.trim(),   // <-- ojo: Password (capital P)
+    });
+
+    const res = await fetch(`http://localhost:4000/users?${params.toString()}`);
+    if (!res.ok) throw new Error("No se pudo obtener usuarios");
+
+    const usuarios = await res.json();
+    const usuario = usuarios[0]; // json-server devuelve [] si no hay coincidencia exacta
+
+    if (usuario) {
+      setUser(usuario);
+      navigate("/");
+    } else {
+      setLoginError("Usuario y/o contraseña no coinciden");
+    }
+  } catch (err) {
+    console.error(err);
+    setLoginError("Error al validar usuario");
+  }
+};
+
+  return (
+    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-white">
       <div className="card shadow-lg p-4" style={{ maxWidth: '400px', width: '100%' }}>
         <h2 className="text-center mb-4 text-primary">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {loginError && <div className="alert alert-danger py-2 small">{loginError}</div>}
           <div className="mb-3">
             <label className="form-label">Usuario</label>
             <input
@@ -63,5 +86,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-	);
+  );
 }
