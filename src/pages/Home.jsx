@@ -83,28 +83,33 @@ export default function Home() {
         <h2 className="text-center mb-5 fw-bold" style={{color:'#0f2c6e'}}>Mascotas Felices</h2>
         <div className="row g-4">
           <div className="col-6 col-md-3">
-            <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80" alt="Perro feliz" className="img-fluid rounded shadow-sm" />
+            <img src="/home/mascotafeliz1.jpg" alt="" className="img-fluid rounded shadow-sm" />
           </div>
           <div className="col-6 col-md-3">
-            <img src="https://images.unsplash.com/photo-1518715308788-3005759c41c8?auto=format&fit=crop&w=400&q=80" alt="Gato feliz" className="img-fluid rounded shadow-sm" />
+            <img src="/home/mascotafeliz2.jpg" alt="" className="img-fluid rounded shadow-sm" />
           </div>
           <div className="col-6 col-md-3">
-            <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=400&q=80" alt="Conejo feliz" className="img-fluid rounded shadow-sm" />
+            <img src="/home/mascotafeliz3.png" alt="" className="img-fluid rounded shadow-sm" />
           </div>
           <div className="col-6 col-md-3">
-            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Ave feliz" className="img-fluid rounded shadow-sm" />
+            <img src="/home/mascotafeliz4.jpg" alt="" className="img-fluid rounded shadow-sm" />
           </div>
         </div>
       </section>
 
       {/* Sobre Nosotros */}
       <section className="container py-5">
-        <div className="row align-items-center">
-          <div className="col-md-6 mb-4 mb-md-0">
-            <img src="/products/choice.png" alt="Equipo veterinario" className="img-fluid rounded shadow" style={{maxHeight:'260px'}} />
+        <div className="row align-items-center justify-content-center">
+          <div className="col-12 col-md-5 d-flex justify-content-center mb-4 mb-md-0">
+            <img
+              src="/home/elegirnos.jpg"
+              alt="Equipo veterinario"
+              className="img-fluid rounded shadow"
+              style={{ maxHeight: '320px', width: '100%', objectFit: 'contain', maxWidth: 420 }}
+            />
           </div>
-          <div className="col-md-6">
-            <h3 className="fw-bold mb-3" style={{color:'#0f2c6e'}}>¿Por qué elegirnos?</h3>
+          <div className="col-12 col-md-6">
+            <h3 className="fw-bold mb-3" style={{ color: '#0f2c6e' }}>¿Por qué elegirnos?</h3>
             <ul className="list-unstyled text-secondary fs-5">
               <li>✔️ Atención cálida y profesional</li>
               <li>✔️ Productos certificados y de alta calidad</li>
@@ -142,22 +147,7 @@ export default function Home() {
       <section className="container py-5">
         <h2 className="text-center mb-5 fw-bold" style={{color:'#0f2c6e'}}>Contáctanos</h2>
         <div className="row justify-content-center">
-          <div className="col-md-6">
-            <form className="bg-white p-4 rounded shadow">
-              <div className="mb-3">
-                <label className="form-label">Nombre</label>
-                <input type="text" className="form-control" placeholder="Tu nombre" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input type="email" className="form-control" placeholder="tu@email.com" />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Mensaje</label>
-                <textarea className="form-control" rows="3" placeholder="¿En qué podemos ayudarte?"></textarea>
-              </div>
-              <button type="submit" className="btn btn-primary w-100 fw-bold">Enviar Mensaje</button>
-            </form>
+          <div className="col-md-6">    
             <div className="mt-4 text-center text-secondary">
               <div><i className="bi bi-geo-alt-fill"></i> San José, Costa Rica</div>
               <div><i className="bi bi-telephone-fill"></i> +506 2222-2222</div>

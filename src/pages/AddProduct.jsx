@@ -1,9 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { Toast } from 'bootstrap';
+
 // Asegúrate de tener Bootstrap importado en tu proyecto, por ejemplo en index.html o main.jsx
 export default function AddProduct() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
- 
+  const navigate = useNavigate();
+
   const onSubmit = async (dataNew) => {
     // Crear el objeto usuario
     const user = {
@@ -24,12 +28,19 @@ export default function AddProduct() {
       if (!response.ok) {
         throw new Error("Error al registrar producto");
       }
-      alert("Producto agregado correctamente");
+      const el = document.getElementById('addedToast');
+      if (el) new Toast(el).show();
       reset();
     } catch (error) {
       alert(error.message);
     }
   }
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate('/mantproductos');
+  };
+
   return (
     <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-white" style={{ marginTop: '-80px' }}>
       <div className="card shadow-lg p-4" style={{ maxWidth: '700px', width: '100%' }}>    
@@ -84,13 +95,31 @@ export default function AddProduct() {
             />
             {errors.price && <div className="text-danger small mt-1">{errors.price.message}</div>}
           </div>
-         
+         <div className="d-flex gap-2">
           <button type="submit" className="btn btn-primary w-100 fw-bold">
             Agregar
           </button>
+          <button className="btn btn-secondary w-100 fw-bold" onClick={handleCancel}>
+              Cancelar
+            </button>
+          </div>
         </form>
        
       </div>
+
+
+              {/* Toast de confirmación */}
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="addedToast" className="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="d-flex">
+            <div className="toast-body">
+              Producto Agregado Correctamente
+            </div>
+            <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

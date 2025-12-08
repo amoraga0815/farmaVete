@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { Toast } from 'bootstrap';
 // Asegúrate de tener Bootstrap importado en tu proyecto, por ejemplo en index.html o main.jsx
 export default function Registro() {
   const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
@@ -26,8 +27,12 @@ export default function Registro() {
       if (!response.ok) {
         throw new Error("Error al registrar usuario");
       }
-      alert("Usuario agregado correctamente");
+      const el = document.getElementById('addedToast');
+      if (el) new Toast(el).show();
       reset();
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
       alert(error.message);
     }
@@ -118,6 +123,21 @@ export default function Registro() {
           </div>
         </form>
       </div>
+
+
+    {/* Toast de confirmación */}
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="addedToast" className="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="d-flex">
+            <div className="toast-body">
+              Registrado Correctamente
+            </div>
+            <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+
     </div>
+    
   );
 }

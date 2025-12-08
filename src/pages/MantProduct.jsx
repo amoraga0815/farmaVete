@@ -1,18 +1,80 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Toast } from 'bootstrap';
  
 function MantProduct() {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
- 
-  useEffect(() => {
+
+  const fetchProductos = () => {
     fetch('http://localhost:4000/products')
       .then((res) => res.json())
       .then((data) => {
         setProductos(data);        
       })
-      .catch();
+      .catch((error) => console.error('Error fetching productos:', error));
+  };
+ 
+  useEffect(() => {
+    fetchProductos();
   }, []);
+  
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', brand: '', price: '' });
+
+  const handleEdit = (prod) => {
+    setEditingProduct(prod);
+    setEditForm({ name: prod.name || '', brand: prod.brand || '', price: prod.price || '' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProduct(null);
+    setEditForm({ name: '', brand: '', price: '' });
+  };
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+    try {
+      const response = await fetch(`http://localhost:4000/products/${editingProduct.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...editingProduct, ...editForm }),
+      });
+      if (!response.ok) throw new Error('Error al guardar cambios');
+     
+      const el = document.getElementById('addedToast');
+      if (el) new Toast(el).show();
+
+      setEditingProduct(null);
+      fetchProductos();
+    } catch (error) {
+      alert('Error: ' + error.message);
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+      try {
+        const response = await fetch(`http://localhost:4000/products/${id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error('Error al eliminar el producto');
+        }
+        
+        const el = document.getElementById('deleteToast');
+        if (el) new Toast(el).show();
+        
+        fetchProductos();
+      } catch (error) {
+        alert('Error: ' + error.message);
+        console.error('Error:', error);
+      }
+    }
+  };
  
   return (
     <div style={{ padding: '2rem' }}>
@@ -24,6 +86,8 @@ function MantProduct() {
         Agregar Producto
       </button>
      
+      
+
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr style={{ background: '#f5f5f5' }}>
@@ -42,15 +106,90 @@ function MantProduct() {
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.brand}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.price}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>
-                <button style={{ marginRight: '0.5rem', background: '#2196f3', color: 'white', border: 'none', padding: '0.3rem 0.7rem', borderRadius: '4px' }} >Editar</button>
-                <button style={{ background: '#f44336', color: 'white', border: 'none', padding: '0.3rem 0.7rem', borderRadius: '4px'  }} >Eliminar</button>
+                <button onClick={() => handleEdit(prod)} style={{ marginRight: '0.5rem', background: '#2196f3', color: 'white', border: 'none', padding: '0.3rem 0.7rem', borderRadius: '4px' }} >Editar</button>
+                <button 
+                  onClick={() => handleDelete(prod.id)}
+                  style={{ background: '#f44336', color: 'white', border: 'none', padding: '0.3rem 0.7rem', borderRadius: '4px'  }} 
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+
+      {editingProduct && (
+        <div className="card shadow-lg p-4" style={{ background: '#fff', borderRadius: 6, boxShadow: '0 1px 6px rgba(0,0,0,0.08)', marginBottom: '2rem', marginTop: '2%', maxWidth: 500, margin: '2% auto 2rem auto' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '1.5rem' }}>Editar producto: {editingProduct.id}</h3>
+          <form onSubmit={handleSaveEdit}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Nombre</label>
+                <input 
+                  value={editForm.name} 
+                  onChange={(e) => setEditForm(f => ({ ...f, name: e.target.value }))} 
+                  placeholder="Nombre del producto" 
+                  className="form-control" 
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Marca</label>
+                <input 
+                  value={editForm.brand} 
+                  onChange={(e) => setEditForm(f => ({ ...f, brand: e.target.value }))} 
+                  placeholder="Marca del producto" 
+                  className="form-control" 
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Precio</label>
+                <input 
+                  value={editForm.price} 
+                  onChange={(e) => setEditForm(f => ({ ...f, price: e.target.value }))} 
+                  placeholder="Precio del producto" 
+                  className="form-control" 
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <button type="submit" className="btn btn-primary">Guardar Cambios</button>
+                <button type="button" className="btn btn-secondary" onClick={handleCancelEdit}>Cancelar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+       
+      )}
  
-      {/* El div de hola ha sido removido para navegación */}
+      
+      {/* Toast de confirmación */}
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="deleteToast" className="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="d-flex">
+            <div className="toast-body">
+              Producto Eliminado Correctamente
+            </div>
+            <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+
+      {/* Toast de confirmación */}
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="addedToast" className="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="d-flex">
+            <div className="toast-body">
+              Editado Correctamente
+            </div>
+            <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+      
  
     </div>
   );
