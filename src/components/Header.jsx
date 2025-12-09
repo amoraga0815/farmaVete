@@ -65,8 +65,6 @@ export default function Header() {
 
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/react-query">React Query</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/mantproductos">Mant Producto</Link></li>
               {ctx.user && ctx.user.userPerfil === 'Admin' && (
                 <li className="nav-item"><Link className="nav-link text-danger fw-bold" to="/admin"><i className="bi bi-shield-lock me-1"></i>Administración</Link></li>
               )}

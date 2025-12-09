@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Toast } from 'bootstrap';
@@ -7,15 +7,16 @@ import { Toast } from 'bootstrap';
 export default function AddProduct() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const [imageBase64, setImageBase64] = useState("");
 
   const onSubmit = async (dataNew) => {
-    // Crear el objeto usuario
-    const user = {
+    // Crear el objeto producto
+    const product = {
       name: dataNew.descripcion,
       brand: dataNew.marca,
       rating: dataNew.puntuacion,
       price: dataNew.price,
-      image: "/products/choiceCan.png"
+      image: imageBase64 || "/products/choiceCan.png"
     };
     try {
       const response = await fetch("http://localhost:4000/products", {
@@ -23,7 +24,7 @@ export default function AddProduct() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(product)
       });
       if (!response.ok) {
         throw new Error("Error al registrar producto");
@@ -31,28 +32,49 @@ export default function AddProduct() {
       const el = document.getElementById('addedToast');
       if (el) new Toast(el).show();
       reset();
+      setImageBase64("");
     } catch (error) {
       alert(error.message);
     }
   }
-
-  const handleCancel = (e) => {
-    e.preventDefault();
-    navigate('/mantproductos');
+  // Manejar cambio de imagen
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageBase64(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
-    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-white" style={{ marginTop: '-80px' }}>
+
+      <div className="container-fluid d-flex align-items-center justify-content-center bg-white">
       <div className="card shadow-lg p-4" style={{ maxWidth: '700px', width: '100%' }}>    
         <h2 className="text-center mb-4 text-primary">Agregar Producto</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
-            <label className="form-label">Descripcion</label>
+            <label className="form-label">Imagen del producto</label>
             <input
               className="form-control"
-              placeholder="Descripcion"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            {imageBase64 && (
+              <div className="mt-2 text-center">
+                <img src={imageBase64} alt="preview" style={{maxWidth:120, maxHeight:120, borderRadius:8, border:'1px solid #eee'}} />
+              </div>
+            )}
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Description</label>
+            <input
+              className="form-control"
+              placeholder="Description"
               {...register("descripcion", {
-                required: 'La descripcion es requerida',
+                required: 'La descripción es requerida',
               })}
             />
             {errors.descripcion && <div className="text-danger small mt-1">{errors.descripcion.message}</div>}
@@ -70,13 +92,20 @@ export default function AddProduct() {
           </div>
           <div className="mb-3">
             <label className="form-label">Puntuación</label>
-            <input
-              className="form-control"
-              placeholder="Puntuación"
+            <select
+              className="form-select"
+              defaultValue=""
               {...register("puntuacion", {
-                required: 'La puntuación es requerida'
+                required: 'La puntuación es requerida',
               })}
-            />
+            >
+              <option value="" disabled>Selecciona estrellas</option>
+              <option value="1">★</option>
+              <option value="2">★★</option>
+              <option value="3">★★★</option>
+              <option value="4">★★★★</option>
+              <option value="5">★★★★★</option>
+            </select>
             {errors.puntuacion && <div className="text-danger small mt-1">{errors.puntuacion.message}</div>}
           </div>
           <div className="mb-3">
@@ -99,13 +128,10 @@ export default function AddProduct() {
           <button type="submit" className="btn btn-primary w-100 fw-bold">
             Agregar
           </button>
-          <button className="btn btn-secondary w-100 fw-bold" onClick={handleCancel}>
-              Cancelar
-            </button>
+ 
           </div>
         </form>
        
-      </div>
 
 
               {/* Toast de confirmación */}
@@ -120,6 +146,7 @@ export default function AddProduct() {
         </div>
       </div>
 
+</div>
     </div>
   );
 }

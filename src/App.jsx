@@ -11,6 +11,9 @@ import AddProduct from './pages/AddProduct.jsx'
 import MantProduct from './pages/MantProduct.jsx'
 import Registro from './pages/Registro.jsx';
 import AdminPage from './pages/AdminPage.jsx';
+import AdminUsers from './pages/admin/AdminUsers.jsx';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
+import AdminInvoices from './pages/admin/AdminInvoices.jsx';
 import { useDataContext } from './data/DataContext';
 
 export default function App() {
@@ -32,7 +35,13 @@ export default function App() {
           <Route path="/addproducto" element={<AddProduct />} />
           <Route path="/mantproductos" element={<MantProduct />} />
           <Route path="/registro" element={<Registro />} />
-          <Route path="/admin" element={user && user.userPerfil === 'Admin' ? <AdminPage /> : <Navigate to="/" replace />} />
+          <Route path="/admin/*" element={user && user.userPerfil === 'Admin' ? <AdminPage /> : <Navigate to="/" replace />}>
+            <Route index element={<AdminUsers />} />
+            <Route path="usuarios" element={<AdminUsers />} />
+            <Route path="productos" element={<AdminProducts />} />
+            <Route path="productos/agregar" element={<AddProduct />} />
+            <Route path="facturas" element={<AdminInvoices />} />
+          </Route>
         </Routes>
       </main>
       <Footer />
