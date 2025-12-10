@@ -3,6 +3,7 @@
 import { useDataContext } from '../data/DataContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
+import CartModal from './CartModal';
 
 
 export default function Header() {
@@ -10,6 +11,8 @@ export default function Header() {
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = useState(false);
   const userBtnRef = useRef(null);
+  const cartCount = ctx.cart ? ctx.cart.reduce((acc, item) => acc + item.qty, 0) : 0;
+  const [showCart, setShowCart] = useState(false);
 
   const handleUserClick = () => {
     if (!ctx.user) {
@@ -65,6 +68,9 @@ export default function Header() {
 
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
+              {ctx.user && (
+                <li className="nav-item"><Link className="nav-link" to="/compras"><i className="bi bi-receipt-cutoff me-1"></i>Mis Compras</Link></li>
+              )}
               {ctx.user && ctx.user.userPerfil === 'Admin' && (
                 <li className="nav-item"><Link className="nav-link text-danger fw-bold" to="/admin"><i className="bi bi-shield-lock me-1"></i>Administración</Link></li>
               )}
@@ -119,10 +125,15 @@ export default function Header() {
                   </div>
                 )}
               </div>
-              <button className="btn btn-link text-dark position-relative">
+              <button className="btn btn-link text-dark position-relative" title="Ver carrito" onClick={()=>setShowCart(true)}>
                 <i className="bi bi-cart fs-5"></i>
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"></span>
+                {cartCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                    {cartCount}
+                  </span>
+                )}
               </button>
+              <CartModal show={showCart} onClose={()=>setShowCart(false)} />
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Toast } from 'bootstrap';
+import { useDataContext } from '../data/DataContext';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [qty, setQty] = useState(1);
   const toastRef = useRef(null);
+  const { addToCart } = useDataContext();
 
   useEffect(() => {
     setLoading(true);
@@ -38,11 +40,14 @@ export default function ProductDetail() {
 
   const price = product?.price ?? product?.fromPrice ?? 0;
 
-  const addToCart = () => {
-    try {
-      const el = document.getElementById('addedToast');
-      if (el) new Toast(el).show();
-    } catch {}
+  const handleAddToCart = async () => {
+    if (product) {
+      await addToCart(product, qty);
+      try {
+        const el = document.getElementById('addedToast');
+        if (el) new Toast(el).show();
+      } catch {}
+    }
   };
 
   if (loading) {
@@ -115,7 +120,7 @@ export default function ProductDetail() {
 
         {/* Acciones */}
         <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
-          <button className="btn btn-primary" onClick={addToCart}>Agregar al Carrito</button>
+          <button className="btn btn-primary" onClick={handleAddToCart}>Agregar al Carrito</button>
         </div>
       </div>
 
