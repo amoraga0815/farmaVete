@@ -20,11 +20,16 @@ function AdminProducts() {
   }, []);
   
   const [editingProduct, setEditingProduct] = useState(null);
-  const [editForm, setEditForm] = useState({ name: '', brand: '', price: '' });
+  const [editForm, setEditForm] = useState({ name: '', brand: '', price: '', stock: '' });
 
   const handleEdit = (prod) => {
     setEditingProduct(prod);
-    setEditForm({ name: prod.name || '', brand: prod.brand || '', price: prod.price || '' });
+    setEditForm({
+      name: prod.name || '',
+      brand: prod.brand || '',
+      price: prod.price || '',
+      stock: typeof prod.stock === 'number' ? prod.stock : (prod.stock ? Number(prod.stock) : '')
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -37,10 +42,16 @@ function AdminProducts() {
     e.preventDefault();
     if (!editingProduct) return;
     try {
+      // Aseguramos que el stock se envíe como number
+      const editFormToSend = {
+        ...editingProduct,
+        ...editForm,
+        stock: editForm.stock !== '' ? Number(editForm.stock) : 0
+      };
       const response = await fetch(`http://localhost:4000/products/${editingProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...editingProduct, ...editForm }),
+        body: JSON.stringify(editFormToSend),
       });
       if (!response.ok) throw new Error('Error al guardar cambios');
      
@@ -149,6 +160,21 @@ function AdminProducts() {
                   onChange={(e) => setEditForm(f => ({ ...f, price: e.target.value }))} 
                   placeholder="Precio del producto" 
                   className="form-control" 
+                  style={{ width: '100%' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Stock</label>
+                <input
+                  value={editForm.stock}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setEditForm(f => ({ ...f, stock: val === '' ? '' : Number(val) }));
+                  }}
+                  placeholder="Stock del producto"
+                  className="form-control"
+                  type="number"
+                  min={0}
                   style={{ width: '100%' }}
                 />
               </div>

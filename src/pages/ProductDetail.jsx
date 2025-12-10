@@ -12,7 +12,9 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [qty, setQty] = useState(1);
   const toastRef = useRef(null);
-  const { addToCart } = useDataContext();
+  const { addToCart, user } = useDataContext();
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+  const [showStockAlert, setShowStockAlert] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -39,10 +41,41 @@ export default function ProductDetail() {
   }, []);
 
   const price = product?.price ?? product?.fromPrice ?? 0;
+  const stock = product && product.stock !== undefined ? Number(product.stock) : undefined;
 
   const handleAddToCart = async () => {
+    if (!user) {
+      setShowLoginAlert(true);
+      setTimeout(() => setShowLoginAlert(false), 2500);
+      return;
+    }
     if (product) {
-      await addToCart(product, qty);
+      if (typeof product.stock === 'number' && qty > product.stock) {
+        setShowStockAlert(true);
+        setTimeout(() => setShowStockAlert(false), 2500);
+        return;
+      }
+      if (typeof product.stock === 'number' && product.stock <= 0) {
+        setShowStockAlert(true);
+        setTimeout(() => setShowStockAlert(false), 2500);
+        return;
+      }
+      // Actualizar stock en el backend y en el frontend
+      const newStock = (typeof product.stock === 'number' ? product.stock : Number(product.stock)) - qty;
+      try {
+        // PATCH al backend para actualizar el stock
+        await fetch(`http://localhost:4000/products/${product.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stock: newStock })
+        });
+        // Actualizar el producto localmente para reflejar el nuevo stock
+        setProduct({ ...product, stock: newStock });
+      } catch (err) {
+        alert('Error actualizando el stock');
+        return;
+      }
+      await addToCart({ ...product, stock: newStock }, qty);
       try {
         const el = document.getElementById('addedToast');
         if (el) new Toast(el).show();
@@ -73,6 +106,18 @@ export default function ProductDetail() {
 
   return (
     <section className="container-fluid p-3 product-detail-grid">
+      {showLoginAlert && (
+        <div className="alert alert-warning position-fixed top-0 start-50 translate-middle-x mt-3 shadow" style={{zIndex:2000, maxWidth:400}}>
+          <i className="bi bi-exclamation-triangle me-2"></i>
+          Debes iniciar sesión para agregar productos al carrito.
+        </div>
+      )}
+      {showStockAlert && (
+        <div className="alert alert-danger position-fixed top-0 start-50 translate-middle-x mt-5 shadow" style={{zIndex:2000, maxWidth:400}}>
+          <i className="bi bi-x-octagon me-2"></i>
+          No hay suficiente stock para la cantidad seleccionada.
+        </div>
+      )}
       {/* migas de pan */}
       <nav className="mb-3">
         <ol className="breadcrumb">
@@ -104,7 +149,16 @@ export default function ProductDetail() {
         <div className="row g-2 small mb-3">
           <div className="col-6"><span className="text-muted">Proveedor:</span> <strong>{product.brand}</strong></div>
           <div className="col-6"><span className="text-muted">SKU:</span> <strong>{String(product.id).padStart(8,'0')}</strong></div>
-          <div className="col-6"><span className="text-muted">Disponible:</span> <span className="text-success">En Stock</span></div>
+          <div className="col-6">
+            <span className="text-muted">Disponible:</span> {typeof stock === 'number' && stock > 0 ? (
+              <span className="text-success">En Stock</span>
+            ) : (
+              <span className="text-danger">Sin Stock</span>
+            )}
+          </div>
+          <div className="col-6 small text-muted">
+            Stock disponible: <span className="fw-bold text-primary">{typeof stock === 'number' ? stock : 'N/D'}</span>
+          </div>
           <div className="col-6"><span className="text-muted">Tags:</span> <span className="badge bg-light text-dark">{product.brand}</span></div>
         </div>
 
@@ -112,9 +166,9 @@ export default function ProductDetail() {
         <div className="mb-3">
           <div className="small text-muted mb-1">Cantidad</div>
           <div className="input-group" style={{maxWidth:'200px'}}>
-            <button className="btn btn-outline-secondary" onClick={()=>setQty(q=>Math.max(1, q-1))}>−</button>
-            <input className="form-control text-center" value={qty} onChange={(e)=>setQty(Math.max(1, parseInt(e.target.value || 1, 10)))} />
-            <button className="btn btn-outline-secondary" onClick={()=>setQty(q=>q+1)}>+</button>
+            <button className="btn btn-outline-secondary" onClick={()=>setQty(q=>Math.max(1, q-1))} disabled={qty<=1}>−</button>
+            <input className="form-control text-center" value={qty} min={1} max={stock ?? 99} onChange={(e)=>setQty(Math.max(1, Math.min(stock ?? 99, parseInt(e.target.value || 1, 10))))} />
+            <button className="btn btn-outline-secondary" onClick={()=>setQty(q=>Math.min((stock ?? 99), q+1))} disabled={typeof stock==='number' && qty>=stock}>+</button>
           </div>
         </div>
 

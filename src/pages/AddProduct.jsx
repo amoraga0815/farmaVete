@@ -16,6 +16,7 @@ export default function AddProduct() {
       brand: dataNew.marca,
       rating: dataNew.puntuacion,
       price: dataNew.price,
+      stock: parseInt(dataNew.stock, 10),
       image: imageBase64 || "/products/choiceCan.png"
     };
     try {
@@ -123,6 +124,20 @@ export default function AddProduct() {
               })}
             />
             {errors.price && <div className="text-danger small mt-1">{errors.price.message}</div>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Stock</label>
+            <input
+              className="form-control"
+              placeholder="Stock"
+              type="number"
+              min={0}
+              {...register("stock", {
+                required: 'El stock es requerido',
+                min: { value: 0, message: 'El stock no puede ser negativo' },
+              })}
+            />
+            {errors.stock && <div className="text-danger small mt-1">{errors.stock.message}</div>}
           </div>
          <div className="d-flex gap-2">
           <button type="submit" className="btn btn-primary w-100 fw-bold">

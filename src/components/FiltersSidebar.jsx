@@ -81,7 +81,7 @@ export default function FiltersSidebar({ state, setState, offcanvasId='offFilter
                   indeterminate={someChecked && !allChecked ? 'true' : undefined}
                   onChange={handleAllChange}
                 />
-                <label className="form-check-label fw-bold" htmlFor="brand-all">All</label>
+                <label className="form-check-label fw-bold" htmlFor="brand-all">Todos</label>
               </div>
               {brands.map(brand => (
                 <div className="form-check" key={brand}>

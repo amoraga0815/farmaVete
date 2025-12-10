@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 export default function ProductCard({ product }){
   const navigate = useNavigate()
 
+  // Normalizar el stock como número
+  const stock = product && product.stock !== undefined ? Number(product.stock) : undefined;
   return (
     <div className="card-product">
       <img src={product.image} alt={product.name} loading="lazy" />
@@ -15,6 +17,16 @@ export default function ProductCard({ product }){
           {'★'.repeat(Math.round(product.rating))}{'☆'.repeat(5-Math.round(product.rating))}
         </div>
         <span className="muted small">{product.brand}</span>
+      </div>
+
+      {/* Mostrar stock */}
+      <div className="d-flex align-items-center gap-2 mb-1">
+        <span className="small text-muted">Stock:</span>
+        {typeof stock === 'number' && stock > 0 ? (
+          <span className="fw-bold text-success">{stock}</span>
+        ) : (
+          <span className="fw-bold text-danger">Sin Stock</span>
+        )}
       </div>
 
       <div className="d-grid gap-2">

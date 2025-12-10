@@ -1,8 +1,47 @@
+
 import { useDataContext } from '../data/DataContext';
 import { useState, useEffect } from 'react';
 
 export default function CartModal({ show, onClose }) {
   const { cart, cartTotal, clearCart, user } = useDataContext();
+  const [removing, setRemoving] = useState(false);
+    // Eliminar producto del carrito y devolver stock
+    const handleRemoveProduct = async (productId, qty) => {
+      setRemoving(true);
+      try {
+        // 1. Devolver stock al producto
+        const prodRes = await fetch(`http://localhost:4000/products/${productId}`);
+        const prod = await prodRes.json();
+        const newStock = (typeof prod.stock === 'number' ? prod.stock : Number(prod.stock)) + qty;
+        await fetch(`http://localhost:4000/products/${productId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stock: newStock })
+        });
+        // 2. Actualizar carrito local
+        const newCart = cart.filter(item => item.product.id !== productId);
+        // 3. Actualizar ListCar en la API
+        const res = await fetch('http://localhost:4000/ListCar');
+        const listCars = await res.json();
+        const userId = user?.id;
+        const myCar = listCars.find(c => c.userId === userId && !c.paid);
+        if (myCar) {
+          const updatedProducts = myCar.products.filter(p => p.id !== productId);
+          const total = newCart.reduce((acc, item) => acc + (item.product.price ?? 0) * item.qty, 0);
+          await fetch(`http://localhost:4000/ListCar/${myCar.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...myCar, products: updatedProducts, total })
+          });
+        }
+        // 4. Actualizar carrito en contexto
+        window.location.reload(); // Forzar recarga para sincronizar contexto y vista
+      } catch (err) {
+        alert('Error al eliminar producto del carrito');
+      } finally {
+        setRemoving(false);
+      }
+    };
   const [paidInfo, setPaidInfo] = useState(null);
 
   // Marcar carrito como pagado en la API y mostrar confirmación
@@ -87,12 +126,18 @@ export default function CartModal({ show, onClose }) {
                       <td>{qty}</td>
                       <td>₡ {product.price?.toLocaleString('es-CR')}</td>
                       <td>₡ {(product.price * qty).toLocaleString('es-CR')}</td>
+                      <td>
+                        <button className="btn btn-sm btn-danger" disabled={removing} title="Eliminar del carrito"
+                          onClick={() => handleRemoveProduct(product.id, qty)}>
+                          <i className="bi bi-trash"></i>
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan={3} className="text-end fw-bold">Total</td>
+                    <td colSpan={4} className="text-end fw-bold">Total</td>
                     <td className="fw-bold text-primary">₡ {cartTotal.toLocaleString('es-CR')}</td>
                   </tr>
                 </tfoot>
