@@ -67,7 +67,12 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="mainNav">
 
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item"><Link className="nav-link" to="/tienda">Productos</Link></li>
+              <li className="nav-item">
+                <Link className="nav-link d-flex align-items-center gap-1" to="/tienda">
+                  <i className="bi bi-box-seam"></i>
+                  Productos
+                </Link>
+              </li>
               {ctx.user && (
                 <li className="nav-item"><Link className="nav-link" to="/compras"><i className="bi bi-receipt-cutoff me-1"></i>Mis Compras</Link></li>
               )}

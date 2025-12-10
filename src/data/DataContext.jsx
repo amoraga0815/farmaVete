@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 
 const DataContext = createContext();
 
@@ -15,42 +15,43 @@ export const DataProvider = ({ children }) => {
     return acc + price * item.qty;
   }, 0);
 
-  // Agrega producto al carrito y sincroniza con API
+  // Agrega producto al carrito (solo actualiza el estado local)
+  const addToCartCalled = useRef(false);
   const addToCart = async (product, qty = 1) => {
-    let newCart;
+    if (addToCartCalled.current) {
+      addToCartCalled.current = false;
+      return;
+    }
+    addToCartCalled.current = true;
     setCart(prev => {
       const idx = prev.findIndex(i => i.product.id === product.id);
       if (idx !== -1) {
         const updated = [...prev];
         updated[idx].qty += qty;
-        newCart = updated;
         return updated;
       }
-      newCart = [...prev, { product, qty }];
-      return newCart;
+      return [...prev, { product, qty }];
     });
+    setTimeout(() => { addToCartCalled.current = false; }, 1000);
+  };
 
-    // Espera a que el estado se actualice antes de sincronizar con la API
-    setTimeout(async () => {
+  // Sincroniza el carrito local con la API cuando cambie
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (!user) return;
+    const syncCart = async () => {
       try {
-        if (!user) return;
-        // Si newCart no está definido (por la naturaleza async de setState), usa el cart + producto actual
-        const currentCart = newCart || [...cart];
-        if (!newCart) {
-          const idx = cart.findIndex(i => i.product.id === product.id);
-          if (idx !== -1) {
-            currentCart[idx].qty += qty;
-          } else {
-            currentCart.push({ product, qty });
-          }
-        }
-        const total = currentCart.reduce((acc, item) => {
+        const total = cart.reduce((acc, item) => {
           const price = item.product.price ?? item.product.fromPrice ?? 0;
           return acc + price * item.qty;
         }, 0);
         let listCar = {
           userId: user.id,
-          products: currentCart.map(i => ({ id: i.product.id, qty: i.qty })),
+          products: cart.map(i => ({ id: i.product.id, qty: i.qty })),
           total,
           paid: false
         };
@@ -74,7 +75,14 @@ export const DataProvider = ({ children }) => {
       } catch (err) {
         console.error('Error sincronizando carrito:', err);
       }
-    }, 0);
+    };
+    syncCart();
+    // eslint-disable-next-line
+  }, [cart, user]);
+
+  // Elimina producto del carrito (la sincronización la hace el useEffect)
+  const removeFromCart = async (productId) => {
+    setCart(prev => prev.filter(item => item.product.id !== productId));
   };
 
   // Limpiar carrito (por ejemplo, tras pagar)
@@ -84,7 +92,7 @@ export const DataProvider = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={{ user, setUser, cart, addToCart, cartTotal, clearCart }}>
+    <DataContext.Provider value={{ user, setUser, cart, addToCart, removeFromCart, cartTotal, clearCart }}>
       {children}
     </DataContext.Provider>
   );

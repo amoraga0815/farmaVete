@@ -80,6 +80,10 @@ export default function ProductDetail() {
         const el = document.getElementById('addedToast');
         if (el) new Toast(el).show();
       } catch {}
+      // Navegar a /tienda después de mostrar el toast
+      setTimeout(() => {
+        navigate('/tienda');
+      }, 1200); // 1.2s para que el toast se vea
     }
   };
 

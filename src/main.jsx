@@ -31,13 +31,11 @@ function RootRouter() {
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <DataProvider>
-        <BrowserRouter>
-          <RootRouter />
-        </BrowserRouter>
-      </DataProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <DataProvider>
+      <BrowserRouter>
+        <RootRouter />
+      </BrowserRouter>
+    </DataProvider>
+  </QueryClientProvider>
 );
