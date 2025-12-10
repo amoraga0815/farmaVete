@@ -2,10 +2,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import ProductGrid from "../components/ProductGrid";
+import { API_URLS } from "../apiConfig";
 
 export default function ReactQuery() {
   const fetchProducts = async () => {
-    const response = await fetch("http://localhost:4000/products");
+    const response = await fetch(API_URLS.products);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }

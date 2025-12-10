@@ -1,5 +1,6 @@
 
 import { useId, useEffect, useState } from 'react'
+import { API_URLS } from '../apiConfig';
 
 export default function FiltersSidebar({ state, setState, offcanvasId='offFilters' }){
   const priceFromId = useId()
@@ -37,7 +38,7 @@ export default function FiltersSidebar({ state, setState, offcanvasId='offFilter
     const [brands, setBrands] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:4000/products')
+      fetch(API_URLS.products)
         .then(res => res.json())
         .then(data => {
           // Extraer marcas únicas

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Toast } from 'bootstrap';
+import { API_URLS } from '../apiConfig';
 
 // Asegúrate de tener Bootstrap importado en tu proyecto, por ejemplo en index.html o main.jsx
 export default function AddProduct() {
@@ -20,7 +21,7 @@ export default function AddProduct() {
       image: imageBase64 || "/products/choiceCan.png"
     };
     try {
-      const response = await fetch("http://localhost:4000/products", {
+      const response = await fetch(API_URLS.products, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

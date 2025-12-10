@@ -5,6 +5,7 @@ import { Offcanvas } from 'bootstrap'
 import Toolbar from '../components/Toolbar.jsx'
 import FiltersSidebar from '../components/FiltersSidebar.jsx'
 import ProductGrid from '../components/ProductGrid.jsx'
+import { API_URLS } from '../apiConfig';
 
 export default function Shop(){
   const [productsData, setProductsData] = useState([]) 
@@ -22,9 +23,9 @@ export default function Shop(){
   
   
   useEffect(() => {
-    fetch('http://localhost:4000/products') 
+    fetch(API_URLS.products)
       .then(response => response.json())
-      .then(data => setProductsData(data)) 
+      .then(data => setProductsData(data))
       .catch(error => console.error('Error al cargar productos:', error))
   }, [])
 

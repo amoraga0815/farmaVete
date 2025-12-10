@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from 'bootstrap';
+import { API_URLS } from '../../apiConfig';
 
 function AdminProducts() {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
 
   const fetchProductos = () => {
-    fetch('http://localhost:4000/products')
+    fetch(API_URLS.products)
       .then((res) => res.json())
       .then((data) => {
-        setProductos(data);        
+        setProductos(data);
       })
       .catch((error) => console.error('Error fetching productos:', error));
   };
@@ -48,7 +49,7 @@ function AdminProducts() {
         ...editForm,
         stock: editForm.stock !== '' ? Number(editForm.stock) : 0
       };
-      const response = await fetch(`http://localhost:4000/products/${editingProduct.id}`, {
+      const response = await fetch(`${API_URLS.products}/${editingProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editFormToSend),
@@ -69,7 +70,7 @@ function AdminProducts() {
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       try {
-        const response = await fetch(`http://localhost:4000/products/${id}`, {
+        const response = await fetch(`${API_URLS.products}/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {

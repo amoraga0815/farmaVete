@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDataContext } from '../data/DataContext';
 import { Link } from 'react-router-dom';
+import { API_URLS } from '../apiConfig';
 
 export default function PurchasesPage() {
   const { user } = useDataContext();
@@ -10,7 +11,7 @@ export default function PurchasesPage() {
   useEffect(() => {
     if (user) {
       setLoading(true);
-      fetch('http://localhost:4000/ListCar?userId=' + user.id + '&paid=true')
+      fetch(`${API_URLS.listCar}?userId=${user.id}&paid=true`)
         .then(res => res.json())
         .then(data => {
           setFacturas(data.filter(f => f.facturaNum));

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDataContext } from "../data/DataContext";
+import { API_URLS } from "../apiConfig";
 
 export default function Login() {
   const { setUser } = useDataContext();
@@ -25,7 +26,7 @@ const onSubmit = async ({ username, password }) => {
       Password: password.trim(),   // <-- ojo: Password (capital P)
     });
 
-    const res = await fetch(`http://localhost:4000/users?${params.toString()}`);
+    const res = await fetch(`${API_URLS.users}?${params.toString()}`);
     if (!res.ok) throw new Error("No se pudo obtener usuarios");
 
     const usuarios = await res.json();

@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Toast } from 'bootstrap';
 import { useDataContext } from '../data/DataContext';
+import { API_URLS } from '../apiConfig';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -19,7 +20,7 @@ export default function ProductDetail() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`http://localhost:4000/products/${id}`)
+    fetch(`${API_URLS.products}/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Producto no encontrado');
         return res.json();
@@ -64,7 +65,7 @@ export default function ProductDetail() {
       const newStock = (typeof product.stock === 'number' ? product.stock : Number(product.stock)) - qty;
       try {
         // PATCH al backend para actualizar el stock
-        await fetch(`http://localhost:4000/products/${product.id}`, {
+        await fetch(`${API_URLS.products}/${product.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ stock: newStock })

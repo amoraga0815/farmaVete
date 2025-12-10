@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import { API_URLS } from '../apiConfig';
 
 const DataContext = createContext();
 
@@ -57,7 +58,7 @@ export const DataProvider = ({ children }) => {
         };
         if (!cartId) {
           // Crear nueva ListCar
-          const res = await fetch('http://localhost:4000/ListCar', {
+          const res = await fetch(API_URLS.listCar, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(listCar)
@@ -66,7 +67,7 @@ export const DataProvider = ({ children }) => {
           setCartId(data.id);
         } else {
           // Actualizar ListCar existente
-          await fetch(`http://localhost:4000/ListCar/${cartId}`, {
+          await fetch(`${API_URLS.listCar}/${cartId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(listCar)

@@ -2,6 +2,7 @@
 import { useDataContext } from '../data/DataContext';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { API_URLS } from '../apiConfig';
 
 function CartModal({ show, onClose }) {
   const navigate = useNavigate();
@@ -22,10 +23,10 @@ function CartModal({ show, onClose }) {
     setRemoving(true);
     try {
       // 1. Devolver stock al producto
-      const prodRes = await fetch(`http://localhost:4000/products/${productId}`);
+      const prodRes = await fetch(`${API_URLS.products}/${productId}`);
       const prod = await prodRes.json();
       const newStock = (typeof prod.stock === 'number' ? prod.stock : Number(prod.stock)) + qty;
-      await fetch(`http://localhost:4000/products/${productId}`, {
+      await fetch(`${API_URLS.products}/${productId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stock: newStock })
@@ -45,14 +46,14 @@ function CartModal({ show, onClose }) {
   // Marcar carrito como pagado en la API y mostrar confirmación
   const handlePay = async () => {
     try {
-      const res = await fetch('http://localhost:4000/ListCar');
+      const res = await fetch(API_URLS.listCar);
       const listCars = await res.json();
       const userId = user?.id;
       const myCar = listCars.find(c => c.userId === userId && !c.paid);
       if (myCar) {
         // Generar número de factura (simple: timestamp + id)
         const facturaNum = 'F-' + myCar.id + '-' + Date.now();
-        await fetch(`http://localhost:4000/ListCar/${myCar.id}`, {
+        await fetch(`${API_URLS.listCar}/${myCar.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...myCar, paid: true, facturaNum })
