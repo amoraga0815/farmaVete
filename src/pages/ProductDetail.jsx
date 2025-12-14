@@ -84,7 +84,7 @@ export default function ProductDetail() {
       // Navegar a /tienda después de mostrar el toast
       setTimeout(() => {
         navigate('/tienda');
-      }, 1200); // 1.2s para que el toast se vea
+      }, 800); // 1.2s para que el toast se vea
     }
   };
 
