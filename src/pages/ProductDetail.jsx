@@ -61,16 +61,16 @@ export default function ProductDetail() {
         setTimeout(() => setShowStockAlert(false), 2500);
         return;
       }
-      // Actualizar stock en el backend y en el frontend
+      
       const newStock = (typeof product.stock === 'number' ? product.stock : Number(product.stock)) - qty;
       try {
-        // PATCH al backend para actualizar el stock
+        
         await fetch(`${API_URLS.products}/${product.id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ stock: newStock })
         });
-        // Actualizar el producto localmente para reflejar el nuevo stock
+        
         setProduct({ ...product, stock: newStock });
       } catch (err) {
         alert('Error actualizando el stock');
@@ -81,10 +81,10 @@ export default function ProductDetail() {
         const el = document.getElementById('addedToast');
         if (el) new Toast(el).show();
       } catch {}
-      // Navegar a /tienda después de mostrar el toast
+     
       setTimeout(() => {
         navigate('/tienda');
-      }, 800); // 1.2s para que el toast se vea
+      }, 800); 
     }
   };
 

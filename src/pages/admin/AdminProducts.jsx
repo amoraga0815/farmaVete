@@ -43,7 +43,7 @@ function AdminProducts() {
     e.preventDefault();
     if (!editingProduct) return;
     try {
-      // Aseguramos que el stock se envíe como number
+
       const editFormToSend = {
         ...editingProduct,
         ...editForm,
@@ -105,6 +105,7 @@ function AdminProducts() {
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Nombre</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Marca</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Precio</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Stock</th>
             <th style={{ border: '1px solid #ddd', padding: '8px' }}>Acciones</th>
           </tr>
         </thead>
@@ -115,6 +116,7 @@ function AdminProducts() {
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.name}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.brand}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.price}</td>
+              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{prod.stock}</td>
               <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                 <button onClick={() => handleEdit(prod)} style={{ marginRight: '0.5rem', background: '#2196f3', color: 'white', border: 'none', padding: '0.3rem 0.7rem', borderRadius: '4px' }} >Editar</button>
                 <button 

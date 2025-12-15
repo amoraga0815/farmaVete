@@ -22,15 +22,15 @@ const onSubmit = async ({ username, password }) => {
   setLoginError("");
   try {
     const params = new URLSearchParams({
-      userName: username.trim(),   // <-- ojo: userName (camelCase)
-      Password: password.trim(),   // <-- ojo: Password (capital P)
+      userName: username.trim(),   
+      Password: password.trim(),   
     });
 
     const res = await fetch(`${API_URLS.users}?${params.toString()}`);
     if (!res.ok) throw new Error("No se pudo obtener usuarios");
 
     const usuarios = await res.json();
-    const usuario = usuarios[0]; // json-server devuelve [] si no hay coincidencia exacta
+    const usuario = usuarios[0]; 
 
     if (usuario) {
       setUser(usuario);

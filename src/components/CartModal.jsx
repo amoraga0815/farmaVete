@@ -43,7 +43,7 @@ function CartModal({ show, onClose }) {
     }
   };
 
-  // Marcar carrito como pagado en la API y mostrar confirmación
+
   const handlePay = async () => {
     try {
       const res = await fetch(API_URLS.listCar);
@@ -79,7 +79,7 @@ function CartModal({ show, onClose }) {
       }, 2500);
       return () => clearTimeout(timer);
     }
-    // eslint-disable-next-line
+    
   }, [paidInfo]);
 
   if (!show) return null;

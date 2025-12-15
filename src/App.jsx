@@ -16,6 +16,7 @@ import AdminProducts from './pages/admin/AdminProducts.jsx';
 import AdminInvoices from './pages/admin/AdminInvoices.jsx';
 import { useDataContext } from './data/DataContext';
 import PurchasesPage from './pages/PurchasesPage.jsx';
+import AddUser from './pages/AddUser.jsx';
 
 export default function App() {
   const { user } = useDataContext();
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="usuarios" element={<AdminUsers />} />
             <Route path="productos" element={<AdminProducts />} />
             <Route path="productos/agregar" element={<AddProduct />} />
+            <Route path="usuarios/agregar" element={<AddUser />} />
             <Route path="facturas" element={<AdminInvoices />} />
           </Route>
         </Routes>

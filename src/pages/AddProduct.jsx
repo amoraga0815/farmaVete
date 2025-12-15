@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { Toast } from 'bootstrap';
 import { API_URLS } from '../apiConfig';
 
-// Asegúrate de tener Bootstrap importado en tu proyecto, por ejemplo en index.html o main.jsx
 export default function AddProduct() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [imageBase64, setImageBase64] = useState("");
 
   const onSubmit = async (dataNew) => {
@@ -71,10 +70,10 @@ export default function AddProduct() {
             )}
           </div>
           <div className="mb-3">
-            <label className="form-label">Description</label>
+            <label className="form-label">Descripción</label>
             <input
               className="form-control"
-              placeholder="Description"
+              placeholder="Descripción"
               {...register("descripcion", {
                 required: 'La descripción es requerida',
               })}

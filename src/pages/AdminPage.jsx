@@ -9,7 +9,7 @@ export default function AdminPage() {
     { key: 'facturas', label: 'Facturas', icon: 'bi-receipt' },
   ];
 
-  // Detectar tab activa por path
+ 
   const activeTab = location.pathname.split('/').pop();
 
   return (

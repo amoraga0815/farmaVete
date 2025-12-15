@@ -39,7 +39,7 @@ export default function Home() {
             <Link className="btn btn-primary btn-lg px-4 fw-bold" to="/tienda">Explora la Tienda</Link>
           </div>
           <div className="col-md-6 text-center">
-            <img src="/products/choice.png" alt="Veterinaria Luna & Ernesto" className="img-fluid rounded shadow" style={{maxHeight:'320px'}} />
+            <img src="/home/ernestoluna.jpg" alt="Veterinaria Luna & Ernesto" className="img-fluid rounded shadow" style={{maxHeight:'320px'}} />
           </div>
         </div>
       </section>
@@ -157,7 +157,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Llamado a la acción */}
+      {}
       <section className="bg-primary text-white py-5">
         <div className="container text-center">
           <h2 className="fw-bold mb-3">¡Dale lo mejor a tu mascota!</h2>
