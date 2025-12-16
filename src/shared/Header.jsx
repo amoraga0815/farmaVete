@@ -3,7 +3,7 @@
 import { useDataContext } from '../data/DataContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import CartModal from './CartModal';
+import CartModal from '../pages/shop/CartModal.jsx';
 
 
 export default function Header() {

@@ -1,6 +1,10 @@
 
+
 import React, { useEffect, useState } from 'react';
 import { API_URLS } from '../../apiConfig';
+import InvoicesStats from './components/admininvoices/InvoicesStats';
+import InvoicesSalesByMonth from './components/admininvoices/InvoicesSalesByMonth';
+import InvoicesTable from './components/admininvoices/InvoicesTable';
 
 
 export default function AdminInvoices() {
@@ -90,66 +94,12 @@ export default function AdminInvoices() {
       </div>
 
       {/* Estadísticas */}
-      <div className="row mb-4 g-3">
-        <div className="col-md-4">
-          <div className="card shadow-sm border-0 text-center h-100">
-            <div className="card-body">
-              <i className="bi bi-cash-coin display-6 text-success mb-2"></i>
-              <h5 className="card-title">Total Ventas</h5>
-              <p className="fs-4 fw-bold">₡{totalVentas.toLocaleString('es-CL')}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div className="card shadow-sm border-0 text-center h-100">
-            <div className="card-body">
-              <i className="bi bi-receipt-cutoff display-6 text-primary mb-2"></i>
-              <h5 className="card-title">Facturas Emitidas</h5>
-              <p className="fs-4 fw-bold">{totalFacturas}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div className="card shadow-sm border-0 text-center h-100">
-            <div className="card-body">
-              <i className="bi bi-box-seam display-6 text-info mb-2"></i>
-              <h5 className="card-title">Productos Vendidos</h5>
-              <p className="fs-4 fw-bold">{productosVendidos}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <InvoicesStats totalVentas={totalVentas} totalFacturas={totalFacturas} productosVendidos={productosVendidos} />
 
       {/* Estadística de ventas por mes */}
-      <div className="card shadow-sm border-0 mb-4">
-        <div className="card-header bg-info text-white fw-bold">Ventas por Mes</div>
-        <div className="card-body p-0">
-          {ventasPorMes.length === 0 ? (
-            <div className="p-3 text-muted">No hay datos de ventas por mes.</div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-sm mb-0">
-                <thead>
-                  <tr>
-                    <th>Mes</th>
-                    <th>Total Vendido</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ventasPorMes.map((v, i) => (
-                    <tr key={i}>
-                      <td>{v.mes}</td>
-                      <td>₡{v.total.toLocaleString('es-CL')}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
+      <InvoicesSalesByMonth ventasPorMes={ventasPorMes} />
 
-     {/* Filtro por usuario */}
+      {/* Filtro por usuario */}
       <div className="row mb-3 justify-content-end">
         <div className="col-md-4 col-sm-6">
           <input
@@ -167,64 +117,7 @@ export default function AdminInvoices() {
         <div className="card-header bg-primary text-white fw-bold fs-5">
           Todas las Facturas
         </div>
-        <div className="table-responsive">
-          {loading ? (
-            <div className="text-center p-4">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Cargando...</span>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="alert alert-danger m-3">{error}</div>
-          ) : (
-            <table className="table table-hover align-middle mb-0">
-              <thead className="table-light">
-                <tr>
-                  <th>#</th>
-                  <th>ID Factura</th>
-                  <th>ID Usuario</th>
-                  <th>Nombre Usuario</th>
-                  <th>Productos</th>
-                  <th>Total</th>
-                  <th>Pagada</th>
-                  <th>Número Factura</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredInvoices.map((factura, idx) => (
-                  <tr key={factura.id}>
-                    <td>{idx + 1}</td>
-                    <td>{factura.id}</td>
-                    <td>{factura.userId}</td>
-                    <td>{getUserName(factura.userId)}</td>
-                    <td>
-                      {Array.isArray(factura.products) && factura.products.length > 0 ? (
-                        <ul className="mb-0 ps-3">
-                          {factura.products.map((p, i) => (
-                            <li key={i}>
-                              <span className="badge bg-secondary">ID: {p.id}</span> x <span className="fw-bold">{p.qty}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span className="text-muted">Sin productos</span>
-                      )}
-                    </td>
-                    <td>₡{factura.total?.toLocaleString('es-CL') ?? 0}</td>
-                    <td>
-                      {factura.paid ? (
-                        <span className="badge bg-success">Sí</span>
-                      ) : (
-                        <span className="badge bg-danger">No</span>
-                      )}
-                    </td>
-                    <td>{factura.facturaNum || <span className="text-muted">-</span>}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+        <InvoicesTable loading={loading} error={error} filteredInvoices={filteredInvoices} getUserName={getUserName} />
       </div>
     </div>
   );

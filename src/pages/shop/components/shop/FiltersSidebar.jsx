@@ -1,6 +1,6 @@
 
 import { useId, useEffect, useState } from 'react'
-import { API_URLS } from '../apiConfig';
+import { API_URLS } from '../../../../apiConfig.js';
 
 export default function FiltersSidebar({ state, setState, offcanvasId='offFilters' }){
   const priceFromId = useId()

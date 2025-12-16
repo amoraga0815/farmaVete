@@ -1,8 +1,12 @@
 
-import { useDataContext } from '../data/DataContext';
+
+import { useDataContext } from '../../data/DataContext';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_URLS } from '../apiConfig';
+import { API_URLS } from '../../apiConfig';
+import CartTable from './components/cartmodal/CartTable';
+import CartPaidInfo from './components/cartmodal/CartPaidInfo';
+import CartEmpty from './components/cartmodal/CartEmpty';
 
 function CartModal({ show, onClose }) {
   const navigate = useNavigate();
@@ -84,9 +88,6 @@ function CartModal({ show, onClose }) {
 
   if (!show) return null;
 
-  // Calcular el total del carrito local
-  const localCartTotal = localCart.reduce((acc, item) => acc + (item.product.price ?? 0) * item.qty, 0);
-
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ background: 'rgba(0,0,0,0.3)' }}>
       <div className="modal-dialog modal-lg" role="document">
@@ -107,57 +108,11 @@ function CartModal({ show, onClose }) {
           </div>
           <div className="modal-body">
             {paidInfo ? (
-              <div className="alert alert-success text-center p-4" style={{ fontSize: '1.2em' }}>
-                <i className="bi bi-check-circle-fill text-success" style={{ fontSize: '2em' }}></i>
-                <div className="mt-2">¡Pago realizado correctamente!</div>
-                {paidInfo.facturaNum && (
-                  <div className="mt-2">Número de factura: <span className="fw-bold text-primary">{paidInfo.facturaNum}</span></div>
-                )}
-                {paidInfo.error && (
-                  <div className="mt-2 text-danger">{paidInfo.error}</div>
-                )}
-              </div>
+              <CartPaidInfo paidInfo={paidInfo} />
             ) : localCart.length === 0 ? (
-              <div className="alert alert-info text-center">No hay productos en el carrito.</div>
+              <CartEmpty />
             ) : (
-              <table className="table table-hover align-middle">
-                <thead>
-                  <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {localCart.map(({ product, qty }) => (
-                    <tr key={product.id}>
-                      <td>
-                        <div className="d-flex align-items-center gap-2">
-                          <img src={product.image} alt={product.name} style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: '8px', border: '1px solid #eee' }} />
-                          <span>{product.name}</span>
-                        </div>
-                      </td>
-                      <td>{qty}</td>
-                      <td>₡ {product.price?.toLocaleString('es-CR')}</td>
-                      <td>₡ {(product.price * qty).toLocaleString('es-CR')}</td>
-                      <td>
-                        <button className="btn btn-sm btn-danger" disabled={removing} title="Eliminar del carrito"
-                          onClick={() => handleRemoveProduct(product.id, qty)}>
-                          <i className="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan={4} className="text-end fw-bold">Total</td>
-                    <td className="fw-bold text-primary">₡ {localCartTotal.toLocaleString('es-CR')}</td>
-                  </tr>
-                </tfoot>
-              </table>
+              <CartTable localCart={localCart} removing={removing} handleRemoveProduct={handleRemoveProduct} />
             )}
           </div>
           <div className="modal-footer">

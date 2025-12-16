@@ -12,8 +12,8 @@ import './style.css'
 
 
 import App from './App.jsx';
-import Login from './pages/Login.jsx';
-import Registro from './pages/Registro.jsx';
+import Login from './pages/auth/Login.jsx';
+import Registro from './pages/auth/Registro.jsx';
 import { DataProvider, useDataContext } from './data/DataContext';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from 'react-router-dom';

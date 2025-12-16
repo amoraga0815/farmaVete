@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Offcanvas } from 'bootstrap'   
-import Toolbar from '../components/Toolbar.jsx'
-import FiltersSidebar from '../components/FiltersSidebar.jsx'
-import ProductGrid from '../components/ProductGrid.jsx'
-import { API_URLS } from '../apiConfig';
+import Toolbar from './components/shop/Toolbar.jsx'
+import FiltersSidebar from './components/shop/FiltersSidebar.jsx'
+import ProductGrid from './components/shop/ProductGrid.jsx'
+import { API_URLS } from '../../apiConfig.js';
 
 export default function Shop(){
   const [productsData, setProductsData] = useState([]) 
